@@ -11,4 +11,4 @@ var JsonArr = JSON.parse(data);
                   ,'\n','population: ',JsonArr.cities[i].population
                   ,'\n','\n','-------------');
   }
-});;
+});
