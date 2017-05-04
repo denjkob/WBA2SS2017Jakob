@@ -1,8 +1,7 @@
 var fs = require('fs');
 
-fs.readFile("staedte.json",'utf8', function(err,data) {
-if(err){
-  throw err;
+fs.readFile("staedte.json",'utf8', function(data) {
+
   }
 var JsonArr = JSON.parse(data);
   for (i in JsonArr.cities){
