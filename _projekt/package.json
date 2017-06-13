@@ -1,0 +1,14 @@
+{
+  "name": "wba2ss2017pintojakobdasilvacordeiro",
+  "version": "1.0.0",
+  "description": "Ein Projekt im Rahmen der WBA2 Veranstalltung im SS2017.",
+  "main": "dienstgeber.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
