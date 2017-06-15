@@ -1,8 +1,11 @@
 //TODO Dienstgeber
 const express = require("express");
-//TODO body-parser, siehe Screencast
+const user = require("./user");
 //express an die Variable "app" binden
 const app = express();
+//Route an app binden
+app.use("/user", user);
+
 const settings = {
     port: 5000
     //datafile: DATEN
@@ -14,20 +17,15 @@ app.use(function(err,req,res,next){
   res.end(err.status + " " + err.messages);
 });
 //Pfad und Zeit für Request
-app.use(function(err,req,res,next){
-  console.log("Time %d" + "Request-Pfad: "+req.path, Date.now());
-})
-//GET Requests, später auslagern siehe Screencast express
-app.get('/', function (req, res) {
-  res.send('GET Hello World!');
+app.use(function(req,res,next){
+  console.log("Time %d " + "Request-Pfad: "+req.path, Date.now());
+  next();
 });
-
-app.get('/user', function(req,res){
-  //TODO Response
-  res.send('GET TODO');
+//GET Requests
+app.get("/", function (req, res) {
+  res.send("GET Hello World!");
 });
 //TODO siehe Modellierung
-
 //TODO POST Requests s
 //TODO PUT Requests
 //TODO DELETE Requests
