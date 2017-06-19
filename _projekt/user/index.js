@@ -20,6 +20,11 @@ router.put("/", function(req,res){
     console.log("TODO");
 });
 
+router.get("/:id", function(req,res){
+    res.send("GET User "+ req.params.id);
+    //TODO Wirkliche Implementierung
+});
+
 //router.delete
 
 module.exports = router;

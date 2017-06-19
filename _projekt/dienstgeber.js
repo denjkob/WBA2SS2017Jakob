@@ -19,7 +19,7 @@ app.use(function(err,req,res,next){
   res.end(err.status + " " + err.messages);
 });
 //Pfad und Zeit für Request
-app.use(function(req,res,next){
+app.all(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.path, Date.now());
   next();
 });
