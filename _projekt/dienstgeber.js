@@ -1,10 +1,12 @@
 //TODO Dienstgeber
 const express = require("express");
 const user = require("./user");
+const equipment = require("./equipment");
 //express an die Variable "app" binden
 const app = express();
 //Route an app binden
 app.use("/user", user);
+app.use("/equipment", equipment);
 
 const settings = {
     port: 5000

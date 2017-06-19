@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 
-const ressourceName = "user";
+const ressourceName = "equipment";
 
 //GET auf /user
 router.get("/", function(req,res){
-    res.send("GET Repräsentation aller User");
+    res.send("GET Repräsentation gesamtes Equipment");
     //TODO Wirkliche Implementierung
 });
 router.post("/", bodyParser.json(), function(req, res){
