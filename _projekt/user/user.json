@@ -1,0 +1,12 @@
+{"user":[
+  {"id": 0,
+    "name": "Max Mustermann",
+    "orders": "NULL"
+  },
+  {
+    "id": 1,
+    "name": "Marie Mustermann",
+    "orders": "NULL"
+  }
+  ]
+}

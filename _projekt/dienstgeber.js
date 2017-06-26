@@ -19,13 +19,16 @@ app.use(function(err,req,res,next){
   res.end(err.status + " " + err.messages);
 });
 //Pfad und Zeit für Request
-app.all(function(req,res,next){
+app.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.path, Date.now());
   next();
 });
 //GET Requests
 app.get("/", function (req, res) {
   res.send("GET Hello World!");
+});
+app.get("/user", function(req, res){
+res.send('user');
 });
 //TODO siehe Modellierung
 //TODO POST Requests s
