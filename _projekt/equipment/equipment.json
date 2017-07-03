@@ -1,0 +1,16 @@
+{"equipment":[
+  {"id":0,
+    "label": "ABC Ultra 50",
+    "category": "Kamera",
+    "orderedBy": 1,
+    "orderedUntil": "DATE",
+    "available": "bool"
+  },
+  {"id":1,
+    "label": "ABC Ultra 50",
+    "category": "Kamera",
+    "orderedBy": 1,
+    "orderedUntil": "DATE",
+    "available": "bool"
+  }
+  ]}

@@ -7,9 +7,16 @@ const ressourceName = "user";
 
 //GET auf /user
 router.get("/", function(req,res){
-    res.send("GET Repräsentation aller User");
-    //TODO Wirkliche Implementierung
+   fs.readFile("./user/user.json", "utf8",	function(err,data)	{
+        if (err) throw err;
+
+        var obj = JSON.parse(data);
+        //res.send("GET User "+ req.params.id + "\n"+ data);
+
+        res.send(obj.user);
+    });//TODO Wirkliche Implementierung
 });
+
 router.post("/", bodyParser.json(), function(req, res){
   console.log(req.body);
   res.status(200).json( {uri: req.protocol+"://"+req.header})
@@ -19,15 +26,27 @@ router.post("/", bodyParser.json(), function(req, res){
     var obj = JSON.parse(data);
     obj.user.push(req.body);
     var json = JSON.stringify(obj);
-    fs.writeFile('./user/user.json', json, 'utf8', callback);
+    fs.writeFile('./user/user.json', json, 'utf8', function(err,data){
+      if(err) throw err;
+    });
     var myJSON = JSON.stringify(obj);
   });
 
 });
 
-router.put("/", bodyParser.json(),function(req,res){
-    res.send("PUT TODO");
-    console.log("TODO");
+router.put("/:id", bodyParser.json(),function(req,res){
+  fs.readFile("./user/user.json", "utf8",	function(err,data)	{
+    if (err) throw err;
+
+    var obj = JSON.parse(data);
+    obj.user.splice(req.params.id,1,req.body); //Anfang, wie viele löschen, einfügen
+    var json = JSON.stringify(obj);
+    fs.writeFile('./user/user.json', json, 'utf8', function(err,data){
+      if(err) throw err;
+    });
+    var myJSON = JSON.stringify(obj);
+    res.send("PUT "+obj.user[req.params.id]);
+  });
 });
 
 router.get("/:id", function(req,res){
@@ -40,6 +59,19 @@ router.get("/:id", function(req,res){
     	});
 });
 
-//router.delete
+router.delete("/:id", function(req,res){
+  fs.readFile("./user/user.json", "utf8",	function(err,data)	{
+    if (err) throw err;
+
+    var obj = JSON.parse(data);
+    obj.user.splice(req.params.id, 1);
+    var json = JSON.stringify(obj);
+    fs.writeFile('./user/user.json', json, 'utf8', function(err,data){
+      if(err) throw err;
+    });
+    var myJSON = JSON.stringify(obj);
+    res.send("DELETE");
+  });
+});
 
 module.exports = router;
