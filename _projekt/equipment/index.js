@@ -22,7 +22,7 @@ router.get("/", function(req,res){
 
 router.post("/", bodyParser.json(), function(req, res){
   console.log(req.body);
-  res.status(200).json( {uri: req.protocol+"://"+req.header});
+    res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+req.body.id});
   fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
     if (err) throw err;
 

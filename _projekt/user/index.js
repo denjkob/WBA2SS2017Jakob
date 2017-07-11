@@ -5,7 +5,6 @@ const	fs	=	require('fs');
 
 const ressourceName = "user";
 
-//GET auf /user
 router.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.originalUrl, Date.now());
   next();
@@ -16,15 +15,14 @@ router.get("/", function(req,res){
         if (err) throw err;
 
         var obj = JSON.parse(data);
-        //res.send("GET User "+ req.params.id + "\n"+ data);
 
         res.send(obj.user);
-    });//TODO Wirkliche Implementierung
+    });
 });
 
 router.post("/", bodyParser.json(), function(req, res){
-  console.log(req.body);
-  res.status(200).json( {uri: req.protocol+"://"+req.header})
+  console.log("body: ",req.body);
+  res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+req.body.id});
   fs.readFile("./user/user.json", "utf8",	function(err,data)	{
     if (err) throw err;
 
@@ -34,12 +32,12 @@ router.post("/", bodyParser.json(), function(req, res){
     fs.writeFile('./user/user.json', json, 'utf8', function(err,data){
       if(err) throw err;
     });
-    var myJSON = JSON.stringify(obj);
   });
 
 });
 
 router.put("/:id", bodyParser.json(),function(req,res){
+  console.log("body: ",req.body);
   fs.readFile("./user/user.json", "utf8",	function(err,data)	{
     if (err) throw err;
 
@@ -59,13 +57,15 @@ router.get("/:id", function(req,res){
       if (err) throw err;
 
       var obj = JSON.parse(data);
-      //res.send("GET User "+ req.params.id + "\n"+ data);
+
+      if(obj.user[req.params.id]==null)res.status(404);
+
       res.send(obj.user[req.params.id]);
-    	});
+    });
 });
 router.get("/:id/orders", function(req, res){
   res.send("GET User "+req.params.id+ " orders");
-  //in equipment.json nach "orderedBy" id suchen entsprechend req.params.id
+  //TODO in equipment.json nach "orderedBy" id suchen entsprechend req.params.id
 });
 
 router.delete("/:id", function(req,res){
@@ -78,7 +78,6 @@ router.delete("/:id", function(req,res){
     fs.writeFile('./user/user.json', json, 'utf8', function(err,data){
       if(err) throw err;
     });
-    var myJSON = JSON.stringify(obj);
     res.send("DELETE");
   });
 });
