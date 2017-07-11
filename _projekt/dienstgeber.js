@@ -3,6 +3,7 @@
 const express = require("express");
 const user = require("./user");
 const equipment = require("./equipment");
+const fs = require("fs");
 //express an die Variable "app" binden
 const app = express();
 //Route an app binden
@@ -28,8 +29,14 @@ app.use(function(req,res,next){
 app.get("/", function (req, res) {
   res.send("GET Hello World!");
 });
-app.get("/user", function(req, res){
-res.send('user');
+
+app.get("/searchuser/:name", function(req,res){
+  fs.readFile("./user/user.json", "utf8",	function(err,data)	{
+    if (err) throw err;
+
+    var obj = JSON.parse(data);
+    res.send("GET User "+ req.params.name);
+  });
 });
 //TODO siehe Modellierung
 //TODO POST Requests s
@@ -38,5 +45,5 @@ res.send('user');
 
 //Server wird erstellt
 app.listen(settings.port, function() {
-  console.log("Dienstgeber ist nun auf Port " +settings.port+ " verfügbar.");
+  console.log("Dienstgeber ist nun auf der Adresse http://localhost:" +settings.port+ " verfügbar.");
 });

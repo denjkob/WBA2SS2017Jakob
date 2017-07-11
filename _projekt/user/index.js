@@ -6,6 +6,11 @@ const	fs	=	require('fs');
 const ressourceName = "user";
 
 //GET auf /user
+router.use(function(req,res,next){
+  console.log("Time %d " + "Request-Pfad: "+req.originalUrl, Date.now());
+  next();
+});
+
 router.get("/", function(req,res){
    fs.readFile("./user/user.json", "utf8",	function(err,data)	{
         if (err) throw err;
@@ -57,6 +62,10 @@ router.get("/:id", function(req,res){
       //res.send("GET User "+ req.params.id + "\n"+ data);
       res.send(obj.user[req.params.id]);
     	});
+});
+router.get("/:id/orders", function(req, res){
+  res.send("GET User "+req.params.id+ " orders");
+  //in equipment.json nach "orderedBy" id suchen entsprechend req.params.id
 });
 
 router.delete("/:id", function(req,res){
