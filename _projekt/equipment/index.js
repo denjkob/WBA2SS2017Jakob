@@ -58,6 +58,7 @@ router.get("/:id", function(req,res){
 
       var obj = JSON.parse(data);
       //res.send("GET equipment "+ req.params.id + "\n"+ data);
+      console.log("Name: "+req.query.name)
       res.send(obj.equipment[req.params.id]);
     	});
 });
