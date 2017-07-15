@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const	fs	=	require('fs');
 
 const ressourceName = "equipment";
+const dataFile = "./equipment/equipment.json";
 
 //GET auf /equipment
 router.use(function(req,res,next){
@@ -12,7 +13,7 @@ router.use(function(req,res,next){
 });
 
 router.get("/", function(req,res){
-   fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
+   fs.readFile(dataFile, "utf8",	function(err,data)	{
         if (err) throw err;
 
         var obj = JSON.parse(data);
@@ -23,14 +24,14 @@ router.get("/", function(req,res){
 router.post("/", bodyParser.json(), function(req, res){
   console.log(req.body);
     res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+req.body.id});
-  fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
+  fs.readFile(dataFile, "utf8",	function(err,data)	{
     if (err) throw err;
 
     var obj = JSON.parse(data);
     obj.equipment.push(req.body);
     var json = JSON.stringify(obj);
 
-    fs.writeFile('./equipment/equipment.json', json, 'utf8', function(err,data){
+    fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
   });
@@ -38,14 +39,14 @@ router.post("/", bodyParser.json(), function(req, res){
 });
 
 router.put("/:id", bodyParser.json(),function(req,res){
-  fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
+  fs.readFile(dataFile, "utf8",	function(err,data)	{
     if (err) throw err;
 
     var obj = JSON.parse(data);
     obj.equipment.splice(req.params.id,1,req.body); //Anfang, wie viele löschen, einfügen
     var json = JSON.stringify(obj);
 
-    fs.writeFile('./equipment/equipment.json', json, 'utf8', function(err,data){
+    fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
     res.send("PUT "+obj.equipment[req.params.id]);
@@ -53,7 +54,7 @@ router.put("/:id", bodyParser.json(),function(req,res){
 });
 
 router.get("/:id", function(req,res){
-    fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
+    fs.readFile(dataFile, "utf8",	function(err,data)	{
       if (err) throw err;
 
       var obj = JSON.parse(data);
@@ -63,13 +64,13 @@ router.get("/:id", function(req,res){
 });
 
 router.delete("/:id", function(req,res){
-  fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
+  fs.readFile(dataFile, "utf8",	function(err,data)	{
     if (err) throw err;
 
     var obj = JSON.parse(data);
     obj.equipment.splice(req.params.id, 1);
     var json = JSON.stringify(obj);
-    fs.writeFile('./equipment/equipment.json', json, 'utf8', function(err,data){
+    fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
     res.send("DELETE");
