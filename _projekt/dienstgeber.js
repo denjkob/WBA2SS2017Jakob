@@ -38,10 +38,6 @@ app.get("/searchuser/:name", function(req,res){
     res.send("GET User "+ req.params.name);
   });
 });
-//TODO siehe Modellierung
-//TODO POST Requests s
-//TODO PUT Requests
-//TODO DELETE Requests
 
 //Server wird erstellt
 app.listen(settings.port, function() {

@@ -53,6 +53,15 @@ app.get("/user/:id", function(req,res){
       });
     });
 
+app.get("/user/:id/orders", function(req,res){
+        var url = dUrl+req.path;
+        request(url, function (error, response, body) {
+          if(error) res.status(404);
+          getConsoleOut(error,req, response,body);
+          res.status(response.statusCode).send(body); //res.json(body);
+          });
+        });
+
 app.get("/equipment", function(req,res){
     var url = dUrl+req.path;
     request(url, function (error, response, body) {
@@ -140,6 +149,24 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
+    res.json(body);
+  });
+});
+
+app.put("/equipment/:id/order", bodyParser.json(),function(req,res){
+  var url = dUrl+req.path;
+
+  var options = {
+    uri: url,
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    json: req.body
+  };
+
+  request(options, function(error, response, body){
+    getConsoleOut(error, req, response, body);
     res.json(body);
   });
 });

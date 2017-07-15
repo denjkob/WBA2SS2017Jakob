@@ -64,10 +64,6 @@ router.get("/:id", function(req,res){
       res.send(obj.user[req.params.id]);
     });
 });
-router.get("/:id/orders", function(req, res){
-  res.send("GET User "+req.params.id+ " orders");
-  //TODO in equipment.json nach "orderedBy" id suchen entsprechend req.params.id
-});
 
 router.delete("/:id", function(req,res){
   fs.readFile(dataFile, "utf8",	function(err,data)	{
@@ -81,6 +77,21 @@ router.delete("/:id", function(req,res){
     });
     res.send("DELETE");
   });
+});
+
+router.get("/:id/orders", function(req, res){
+  fs.readFile("./equipment/equipment.json", "utf8", function(err,data){
+    if(err) throw err;
+
+    var obj = JSON.parse(data);
+    var resJson = {"orders":[]};
+    for(i in obj.equipment){
+      if(obj.equipment[i].orderedBy == req.params.id) resJson.orders.push(obj.equipment[i]);
+    }
+    res.json(resJson);
+  });
+
+  //TODO in equipment.json nach "orderedBy" id suchen entsprechend req.params.id
 });
 
 module.exports = router;

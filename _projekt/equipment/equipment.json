@@ -1,1 +1,1 @@
-{"equipment":[{"id":"0","label":"Diablo 2","orderedBy":1,"orderedUntil":"NULL","available":"true"},{"id":1,"label":"ABC Ultra 50","category":"Kamera","orderedBy":1,"orderedUntil":"DATE","available":"bool"},{"id":"2","label":"Diablo 3","orderedBy":1,"orderedUntil":"NULL","available":"true"}]}
+{"equipment":[{"id":"0","label":"Diablo 2","orderedBy":1,"orderedUntil":"NULL","available":"true"},{"id":1,"label":"ABC Ultra 50","category":"Kamera","available":"true"},{"id":"2","label":"Diablo 3","orderedBy":1,"orderedUntil":"NULL","available":"true"}]}
