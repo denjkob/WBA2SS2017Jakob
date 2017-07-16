@@ -137,7 +137,7 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
     headers: {
       "content-type": "application/json"
     },
-    json: req.body
+    json: req.body,
   };
   //faye stuff, also not working
   client.publish("/messages", {text: "EquipmentID "+req.params.id+" wurde geändert."})
@@ -154,7 +154,7 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
 });
 
 app.put("/equipment/:id/order", bodyParser.json(),function(req,res){
-  var url = dUrl+req.path;
+  var url = dUrl+req.path+"?userid="+req.query.userid+"&until="+req.query.until;
 
   var options = {
     uri: url,
