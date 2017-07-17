@@ -12,7 +12,7 @@ function getConsoleOut(error, request, response, body) {
   console.log("path: ", request.path);
   console.log('error:', error); // Print the error if one occurred
   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  console.log('body:', body);
+  //console.log('body:', body);
 }
 
 const settings = {
@@ -154,8 +154,11 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
 });
 
 app.put("/equipment/:id/order", bodyParser.json(),function(req,res){
+  if(req.query.userid != null&&req.query.until!=null){
   var url = dUrl+req.path+"?userid="+req.query.userid+"&until="+req.query.until;
-
+}else{
+  var url = dUrl+req.path;
+}
   var options = {
     uri: url,
     method: "PUT",
