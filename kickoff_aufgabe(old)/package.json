@@ -1,0 +1,22 @@
+{
+  "name": "aufgabe2.2",
+  "version": "1.6.9",
+  "description": "teil 2 von aufgabe 2",
+  "main": "keine ahnung was das ist",
+  "dependencies": {
+    "chalk": "^1.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "whaaaat"
+  },
+  "repository": {
+    "type": "git",
+    "url": "now you lost me"
+  },
+  "keywords": [
+    "holy...."
+  ],
+  "author": "molly",
+  "license": "MIT"
+}

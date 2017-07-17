@@ -1,0 +1,21 @@
+{
+  "name": "wba2ss2017pintojakobdasilvacordeiro",
+  "version": "1.0.0",
+  "description": "Ein Projekt im Rahmen der WBA2 Veranstalltung im SS2017.",
+  "main": "dienstgeber.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dienstgeber.js"
+  },
+  "author": "Jakob, Dennis",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "faye": "^1.2.4",
+    "fs": "0.0.1-security",
+    "nodemon": "^1.11.0",
+    "request": "^2.81.0",
+    "unirest": "^0.5.1"
+  }
+}
