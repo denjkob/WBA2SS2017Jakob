@@ -3,8 +3,10 @@ const express = require("express");
 const http = require("http");
 const bodyParser = require("body-parser");
 const faye = require("faye");
+const igdb = require("igdb-api-node").default;
 
-var app = express();
+const app = express();
+const client = igdb("glf02WQpgRmshvNhjD5wRBsLir9Zp1h7ezVjsnMl2hOkIETLuI");
 //Faye Server
 var server = http.createServer();
 
@@ -17,13 +19,9 @@ function getConsoleOut(error, request, response, body) {
 
 const settings = {
     port: 7070
-    //datafile: DATEN
-    //mehr hier
 };
 
-var dHost = 'http://localhost';
-var dPort = 5000;
-var dUrl = dHost+":"+dPort;
+var dUrl = 'https://gamelend.herokuapp.com' || "http://localhost:5000";
 
 //GET Funktionen
 app.get("/", function(req,res){
@@ -75,8 +73,22 @@ app.get("/equipment/:id", function(req,res){
   var url = dUrl+req.path;
   request(url, function (error, response, body) {
     if(error) res.status(404);
+    var obj = JSON.parse(body);
+    //igdb API
+    client.games({
+      fields: 'summary,rating',
+      limit: 1,
+      search: obj.label
+    }).then(response => {
+        var obj2 = response.body;
+        obj.gdbinfo = obj2;
+        res.send(obj);
+      console.log(JSON.stringify(response.body));
+    }).catch(error => {
+      throw error;
+    });
     getConsoleOut(error,req, response,body);
-    res.status(response.statusCode).send(body); //res.json(body);
+    //res.status(response.statusCode).send(body); //res.json(body);
   });
 });
 
@@ -140,12 +152,12 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
     json: req.body,
   };
   //faye stuff, also not working
-  client.publish("/messages", {text: "EquipmentID "+req.params.id+" wurde geändert."})
+  /*client.publish("/messages", {text: "EquipmentID "+req.params.id+" wurde geändert."})
   .then(function(){
     console.log("Nachricht geschickt!");
   }, function(error){
     console.log("There was an error publishing: "+ error.message);
-  });
+  });*/
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
@@ -213,16 +225,16 @@ app.delete("/equipment/:id", function(req,res){
 
 //faye (not working)
 //Server
-var fayeservice = new faye.NodeAdapter({
+/* var fayeservice = new faye.NodeAdapter({
   mount: "/faye",
   timeout: 45
 });
 fayeservice.attach(server);
 //Client
-var client = new faye.Client("http://localhost:"+settings.port+"/faye");
+var fayeclient = new faye.Client("http://localhost:"+settings.port+"/faye");
 client.subscribe("/messages", function(message) {
   console.log(message.text);
-});
+});*/
 
 
 app.listen(settings.port, function() {
