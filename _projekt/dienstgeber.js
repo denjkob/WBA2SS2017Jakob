@@ -14,7 +14,7 @@ app.use("/user", user);
 app.use("/equipment", equipment);
 
 const settings = {
-    port: 5000
+    port: process.env.PORT || 5000
     //datafile: DATEN
     //mehr hier
 };
@@ -66,5 +66,5 @@ app.get("/igdb", function (req, res) {
 
 //Server wird erstellt
 app.listen(settings.port, function() {
-  console.log("Dienstgeber ist nun auf der Adresse http://localhost:" +settings.port+ " verfügbar.");
+  console.log("Dienstgeber ist nun auf dem Port " +settings.port+ " verfügbar.");
 });

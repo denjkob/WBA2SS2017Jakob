@@ -5,9 +5,9 @@
   "main": "dienstgeber.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon dienstgeber.js"
+    "start": "node dienstgeber.js"
   },
-  "author": "",
+  "author": "Jakob, Dennis",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
