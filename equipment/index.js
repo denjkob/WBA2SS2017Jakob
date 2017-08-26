@@ -23,11 +23,17 @@ router.get("/", function(req,res){
 
 router.post("/", bodyParser.json(), function(req, res){
   console.log(req.body);
-    res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+req.body.id});
+
   fs.readFile(dataFile, "utf8",	function(err,data)	{
     if (err) throw err;
 
     var obj = JSON.parse(data);
+    i = 0
+    while(obj.equipment[i] != null){
+      i++;
+    }
+    res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+i});
+    req.body.id = i;
     obj.equipment.push(req.body);
     var json = JSON.stringify(obj);
 
@@ -35,8 +41,8 @@ router.post("/", bodyParser.json(), function(req, res){
       if(err) throw err;
     });
   });
-
 });
+
 //Methoden auf equipment/ID
 router.put("/:id", bodyParser.json(),function(req,res){
   fs.readFile(dataFile, "utf8",	function(err,data)	{

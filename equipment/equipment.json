@@ -1,1 +1,1 @@
-{"equipment":[{"id":"0","label":"Diablo","available":"true"},{"id":1,"label":"Diablo 2","available":"false","orderedBy":"1","orderedUntil":"23.08.2017"},{"id":"2","label":"Diablo 3","available":"true"}]}
+{"equipment":[{"id":"0","label":"Diablo","available":"true"},{"id":1,"label":"Diablo 2","available":"false","orderedBy":"1","orderedUntil":"23.08.2017"},{"id":"2","label":"Diablo 3","available":"true"},{"label":"Minecraft","available":"false","orderedBy":"1","orderedUntil":"23.08.2017","id":3}]}
