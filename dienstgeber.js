@@ -59,7 +59,7 @@ app.get("/searchequipment/:label", function(req,res){
     var resJson;
     for(i in obj.equipment){
       if(obj.equipment[i].label == req.params.label) {
-          resJson = obj.user[i];
+          resJson = obj.equipment[i];
           res.send(resJson);
       }
     }

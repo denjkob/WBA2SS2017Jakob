@@ -101,6 +101,15 @@ app.get("/searchuser/:name", function(req,res){
   });
 });
 
+app.get("/searchequipment/:label", function(req,res){
+  var url = dUrl+req.path;
+  request(url, function (error, response, body) {
+    if(error) res.status(404);
+    getConsoleOut(error,req, response,body);
+    res.send(body); //res.json(body);
+  });
+});
+
 //POST Methoden
 
 app.post("/user", bodyParser.json(),function(req,res){
