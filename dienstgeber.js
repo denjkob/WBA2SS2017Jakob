@@ -51,6 +51,23 @@ app.get("/searchuser/:name", function(req,res){
 });
 });
 
+app.get("/searchequipment/:label", function(req,res){
+  fs.readFile("./equipment/equipment.json", "utf8",	function(err,data)	{
+    if (err) throw err;
+
+    var obj = JSON.parse(data);
+    var resJson;
+    for(i in obj.equipment){
+      if(obj.equipment[i].label == req.params.label) {
+          resJson = obj.user[i];
+          res.send(resJson);
+      }
+    }
+    if(resJson == null)
+    res.status(404).send('Not found!');
+});
+});
+
 //Server wird erstellt
 app.listen(settings.port, function() {
   console.log("Dienstgeber ist nun auf dem Port " +settings.port+ " verfügbar.");
