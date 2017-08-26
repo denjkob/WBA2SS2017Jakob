@@ -22,20 +22,27 @@ router.get("/", function(req,res){
 });
 
 router.post("/", bodyParser.json(), function(req, res){
-  console.log("body: ",req.body);
-  res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+req.body.id});
+  console.log(req.body);
+
   fs.readFile(dataFile, "utf8",	function(err,data)	{
     if (err) throw err;
 
     var obj = JSON.parse(data);
+    i = 0
+    while(obj.user[i] != null){
+      i++;
+    }
+    res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+i});
+    req.body.id = i;
     obj.user.push(req.body);
     var json = JSON.stringify(obj);
+
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
   });
-
 });
+
 
 router.put("/:id", bodyParser.json(),function(req,res){
   console.log("body: ",req.body);
