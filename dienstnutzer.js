@@ -151,13 +151,12 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
     },
     json: req.body,
   };
-  //faye stuff, also not working
-  /*client.publish("/messages", {text: "EquipmentID "+req.params.id+" wurde geändert."})
+  fayeclient.publish("/messages", {text: "EquipmentID "+req.params.id+" wurde geändert."})
   .then(function(){
     console.log("Nachricht geschickt!");
   }, function(error){
     console.log("There was an error publishing: "+ error.message);
-  });*/
+  });
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
@@ -223,18 +222,18 @@ app.delete("/equipment/:id", function(req,res){
         });
 //TODO
 
-//faye (not working)
+
 //Server
-/* var fayeservice = new faye.NodeAdapter({
+var fayeservice = new faye.NodeAdapter({
   mount: "/faye",
   timeout: 45
 });
 fayeservice.attach(server);
 //Client
 var fayeclient = new faye.Client("http://localhost:"+settings.port+"/faye");
-client.subscribe("/messages", function(message) {
+fayeclient.subscribe("/messages", function(message) {
   console.log(message.text);
-});*/
+});
 
 
 app.listen(settings.port, function() {
