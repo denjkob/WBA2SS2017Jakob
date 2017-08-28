@@ -79,7 +79,12 @@ app.get("/equipment/:id", function(req,res){
       fields: 'summary,rating',
       limit: 1,
       search: obj.label
-    }).then(response => {
+    }, [
+    'name',
+    'rating',
+    "url",
+    'cover'
+] ).then(response => {
         var obj2 = response.body;
         obj.gdbinfo = obj2;
         res.send(obj);
@@ -102,6 +107,24 @@ app.get("/searchuser/:name", function(req,res){
 });
 
 app.get("/searchequipment/:label", function(req,res){
+  var url = dUrl+req.path;
+  request(url, function (error, response, body) {
+    if(error) res.status(404);
+    getConsoleOut(error,req, response,body);
+    res.send(body); //res.json(body);
+  });
+});
+
+app.get("/html/home", function(req,res){
+  var url = dUrl+req.path;
+  request(url, function (error, response, body) {
+    if(error) res.status(404);
+    getConsoleOut(error,req, response,body);
+    res.send(body); //res.json(body);
+  });
+});
+
+app.get("/html/login", function(req,res){
   var url = dUrl+req.path;
   request(url, function (error, response, body) {
     if(error) res.status(404);
@@ -145,6 +168,26 @@ app.post("/equipment", bodyParser.json(),function(req,res){
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
     res.json(body);
+  });
+});
+
+//nicht funktionierend, siehe Dienstgeber
+app.post("/html/register", bodyParser.urlencoded({ extended: true }),function(req,res){
+  var url = dUrl+req.path;
+
+  var options = {
+    uri: url,
+    method: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    data: req.body
+  };
+
+  request(options, function(error, response, body){
+    getConsoleOut(error,req, response,body);
+    console.log(options)
+    res.status(200).send(body);
   });
 });
 

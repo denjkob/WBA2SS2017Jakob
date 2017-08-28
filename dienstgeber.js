@@ -45,7 +45,7 @@ app.get("/searchuser/:name", function(req,res){
     var obj = JSON.parse(data);
     var resJson;
     for(i in obj.user){
-      if(obj.user[i].name == req.params.name) {
+      if(obj.user[i].username == req.params.name) {
           resJson = obj.user[i];
           res.send(resJson);
       }
