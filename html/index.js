@@ -1,5 +1,6 @@
 const express = require("express");
-const expressvalidator = require("express-validator");
+const { check, validationResult } = require('express-validator/check');
+const { matchedData } = require('express-validator/filter');
 const request = require("request");
 const bodyParser = require("body-parser");
 const	fs	=	require('fs');

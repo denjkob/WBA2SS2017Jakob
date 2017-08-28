@@ -1,13 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const	fs	=	require('fs');
-const expressvalidator = require("express-validator");
+const expressValidator = require('express-validator');
 
 const router = express.Router();
 const ressourceName = "user";
 const dataFile = "./user/user.json";
 
 //Methoden auf /user
+router.use(expressValidator());
 router.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.originalUrl, Date.now());
   next();
@@ -34,6 +35,14 @@ router.post("/", bodyParser.json(), function(req, res){
     while(obj.user[i] != null){
       i++;
     }
+    req.checkBody("username", 'username field cannot be empty.').notEmpty();
+    req.checkBody("address", 'address field cannot be empty.').notEmpty();
+
+    const errors = req.validationErrors();
+
+    if(errors) {
+      res.status(400).send(JSON.stringify(errors));
+    }else{
     res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+i});
     req.body.id = i;
     obj.user.push(req.body);
@@ -42,6 +51,7 @@ router.post("/", bodyParser.json(), function(req, res){
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
+  }
   });
 });
 
@@ -52,13 +62,24 @@ router.put("/:id", bodyParser.json(),function(req,res){
     if (err) throw err;
 
     var obj = JSON.parse(data);
+
+    req.checkBody("username", 'username field cannot be empty.').notEmpty();
+    req.checkBody("address", 'address field cannot be empty.').notEmpty();
+    req.checkBody("id", "field not to be modified by user.").not().exists();
+
+    const errors = req.validationErrors();
+
+    if(errors) {
+      res.status(401).send(JSON.stringify(errors));
+    }else{
+
     obj.user.splice(req.params.id,1,req.body); //Anfang, wie viele löschen, einfügen
     var json = JSON.stringify(obj);
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
-    var myJSON = JSON.stringify(obj);
     res.send("PUT "+obj.user[req.params.id]);
+    }
   });
 });
 

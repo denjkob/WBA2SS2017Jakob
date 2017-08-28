@@ -5,7 +5,8 @@ const user = require("./user");
 const equipment = require("./equipment");
 const htmlin = require("./html");
 const fs = require("fs");
-const expressvalidator = require("express-validator");
+const { check, validationResult } = require('express-validator/check');
+const { matchedData } = require('express-validator/filter');
 
 
 //express an die Variable "app" binden
@@ -62,9 +63,9 @@ app.get("/searchequipment/:label", function(req,res){
     var resJson;
     for(i in obj.equipment){
       if(obj.equipment[i].label == req.params.label) {
-          resJson = obj.equipment
-          [i];
-          res.send(resJson);
+          resJson = obj.equipment[i];
+          if (resJson == null) res.status(404).send("No games with this label in database")
+          else res.send(resJson);
       }
     }
     if(resJson == null)

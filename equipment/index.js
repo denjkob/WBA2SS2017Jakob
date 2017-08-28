@@ -1,13 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const	fs	=	require('fs');
-const expressvalidator = require("express-validator");
+const expressValidator = require('express-validator');
 
 const router = express.Router();
 const ressourceName = "equipment";
 const dataFile = "./equipment/equipment.json";
 
 //Methoden auf /equipment
+
+router.use(expressValidator());
 router.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.originalUrl, Date.now());
   next();
@@ -33,7 +35,17 @@ router.post("/", bodyParser.json(), function(req, res){
     while(obj.equipment[i] != null){
       i++;
     }
+    //Validator
+    req.checkBody("label", 'Label field cannot be empty.').notEmpty();
+
+    const errors = req.validationErrors();
+
+    if(errors) {
+      res.status(401).send(JSON.stringify(errors));
+    }else{
+
     res.status(200).json( {uri: req.protocol+"://"+req.headers.host+req.originalUrl+"/"+i});
+    req.body.available = "true";
     req.body.id = i;
     obj.equipment.push(req.body);
     var json = JSON.stringify(obj);
@@ -41,6 +53,7 @@ router.post("/", bodyParser.json(), function(req, res){
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
     });
+  };
   });
 });
 
@@ -50,6 +63,18 @@ router.put("/:id", bodyParser.json(),function(req,res){
     if (err) throw err;
 
     var obj = JSON.parse(data);
+
+    req.checkBody("label", 'Label field cannot be empty.').notEmpty();
+    req.checkBody("id", "field not to be modified by user.").not().exists();
+    req.checkBody("available", "field not to be modified by user").not().exists();
+    req.checkBody("orderedBy", "field not to be modified by user").not().exists();
+    req.checkBody("orderedUntil", "field not to be modified by user").not().exists();
+
+    const errors = req.validationErrors();
+
+    if(errors) {
+      res.status(400).send(JSON.stringify(errors));
+    }else{
     obj.equipment.splice(req.params.id,1,req.body); //Anfang, wie viele löschen, einfügen
     var json = JSON.stringify(obj);
 
@@ -57,6 +82,7 @@ router.put("/:id", bodyParser.json(),function(req,res){
       if(err) throw err;
     });
     res.send("PUT "+obj.equipment[req.params.id]);
+  }
   });
 });
 
