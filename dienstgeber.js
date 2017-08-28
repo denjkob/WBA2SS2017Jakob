@@ -3,7 +3,9 @@
 const express = require("express");
 const user = require("./user");
 const equipment = require("./equipment");
+const htmlin = require("./html");
 const fs = require("fs");
+const expressvalidator = require("express-validator");
 
 
 //express an die Variable "app" binden
@@ -12,6 +14,7 @@ const app = express();
 //Routen an app binden
 app.use("/user", user);
 app.use("/equipment", equipment);
+app.use("/html", htmlin);
 
 const settings = {
     port: process.env.PORT || 5000

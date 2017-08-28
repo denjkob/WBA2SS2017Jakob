@@ -1,8 +1,9 @@
 const express = require("express");
-const router = express.Router();
 const bodyParser = require("body-parser");
 const	fs	=	require('fs');
+const expressvalidator = require("express-validator");
 
+const router = express.Router();
 const ressourceName = "equipment";
 const dataFile = "./equipment/equipment.json";
 

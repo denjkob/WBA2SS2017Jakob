@@ -1,11 +1,13 @@
 const express = require("express");
-const router = express.Router();
 const bodyParser = require("body-parser");
 const	fs	=	require('fs');
+const expressvalidator = require("express-validator");
 
+const router = express.Router();
 const ressourceName = "user";
 const dataFile = "./user/user.json";
 
+//Methoden auf /user
 router.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.originalUrl, Date.now());
   next();
