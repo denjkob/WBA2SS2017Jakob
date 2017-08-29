@@ -6,10 +6,11 @@ const bodyParser = require("body-parser");
 const	fs	=	require('fs');
 const session = require("express-session");
 const passport = require("passport");
+const LocalStrategy = require('passport-local').Strategy;
+
 
 const router = express.Router();
 const ressourceName = "html";
-var userid;
 
 
 router.use(session({
@@ -20,6 +21,14 @@ router.use(session({
 }));
 router.use(passport.initialize());
 router.use(passport.session());
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log(username);
+    console.log(password);
+    return done(null, 'dqasklh');
+  }
+));
 
 router.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.originalUrl, Date.now());
@@ -62,29 +71,18 @@ router.post("/register",bodyParser.urlencoded({ extended: true }),function(req,r
   });
   });
 
-  router.post("/login",bodyParser.urlencoded({ extended: true }),function(req,res,next){
-    console.log(req.body);
-    fs.readFile("./html/login.html", "utf8",	function(err,data)	{
-        fs.readFile("./user/user.json", "utf8", function(err,userdata){
-          var obj = JSON.parse(userdata);
+  router.post("/login", passport.authenticate('local', {
+    successRedirect: 'home',
+    failureRedirect: 'login',
+    failureFlash: false
+  }));
 
-          for(i in obj.user){
-            if(obj.user[i].username == req.body.username && obj.user[i].password == req.body.password) {
-              userid = obj.user[i].id;
-              req.login(userid, function(err){
-                console.log("Success!");
-                res.redirect("home");
-              })
-            }};
-        });
-          //res.status(200).send(data);
-        });
-    });
-    /*passport.serializeUser(function(userid, done) {
+
+    passport.serializeUser(function(userid, done) {
       done(null, userid);
     });
 
     passport.deserializeUser(function(userid, done) {
       done(null, userid);
-});*/
+});
 module.exports = router;

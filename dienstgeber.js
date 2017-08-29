@@ -21,12 +21,6 @@ const settings = {
     port: process.env.PORT || 5000
 };
 
-//Error Handler
-app.use(function(err,req,res,next){
-  console.console.error(err.stack);
-  res.end(err.status + " " + err.messages);
-});
-
 //Pfad und Zeit für Request
 app.use(function(req,res,next){
   console.log("Time %d " + "Request-Pfad: "+req.path, Date.now());

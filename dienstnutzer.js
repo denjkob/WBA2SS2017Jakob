@@ -149,6 +149,12 @@ app.post("/user", bodyParser.json(),function(req,res){
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
+    bayeux.getClient().publish("/messages/new", {text: "Ein neuer User Eintrag wurde angelegt."})
+    .then(function(){
+      console.log("faye: Nachricht geschickt!");
+    }, function(error){
+      console.log("faye: There was an error publishing: "+ error.message);
+    });
     res.json(body);
   });
 });
@@ -167,6 +173,12 @@ app.post("/equipment", bodyParser.json(),function(req,res){
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
+    bayeux.getClient().publish("/messages/new", {text: "Ein neuer Equipment Eintrag wurde angelegt."})
+    .then(function(){
+      console.log("faye: Nachricht geschickt!");
+    }, function(error){
+      console.log("faye: There was an error publishing: "+ error.message);
+    });
     res.json(body);
   });
 });
@@ -203,15 +215,15 @@ app.put("/equipment/:id", bodyParser.json(),function(req,res){
     },
     json: req.body,
   };
-  fayeclient.publish("/messages", {text: "EquipmentID "+req.params.id+" wurde geändert."})
-  .then(function(){
-    console.log("Nachricht geschickt!");
-  }, function(error){
-    console.log("There was an error publishing: "+ error.message);
-  });
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
+    bayeux.getClient().publish("/messages/changes", {text: "UserID "+req.params.id+" wurde geändert."})
+    .then(function(){
+      console.log("faye: Nachricht geschickt!");
+    }, function(error){
+      console.log("faye: There was an error publishing: "+ error.message);
+    });
     res.json(body);
   });
 });
@@ -233,6 +245,21 @@ app.put("/equipment/:id/order", bodyParser.json(),function(req,res){
 
   request(options, function(error, response, body){
     getConsoleOut(error, req, response, body);
+    if(req.query.userid != null&&req.query.until!=null){
+      bayeux.getClient().publish("/messages/orders", {text: "Auf EquipmentID "+req.params.id+" wurde eine Order plaziert von UserID "+req.query.userid+", falls diese freigeben war."})
+      .then(function(){
+        console.log("faye: Nachricht geschickt!");
+      }, function(error){
+        console.log("faye: There was an error publishing: "+ error.message);
+      });
+    }else{
+      bayeux.getClient().publish("/messages/orders", {text: "EquipmentID "+req.params.id+" wurde freigegeben. Es können wieder Orders platziert werden."})
+      .then(function(){
+        console.log("faye: Nachricht geschickt!");
+      }, function(error){
+        console.log("faye: There was an error publishing: "+ error.message);
+      });
+    }
     res.json(body);
   });
 });
@@ -248,6 +275,12 @@ app.put("/user/:id", bodyParser.json(),function(req,res){
     },
     json: req.body
   };
+  bayeux.getClient().publish("/messages/changes", {text: "UserID "+req.params.id+" wurde geändert."})
+  .then(function(){
+    console.log("faye: Nachricht geschickt!");
+  }, function(error){
+    console.log("faye: There was an error publishing: "+ error.message);
+  });
 
   request(options, function(error, response, body){
     getConsoleOut(error,req, response,body);
@@ -260,6 +293,12 @@ app.delete("/user/:id", function(req,res){
       request.delete(url, function (error, response, body) {
         if(error) res.status(400);
         getConsoleOut(error,req, response,body);
+        bayeux.getClient().publish("/messages/delete", {text: "Ein User Delete Request wurde gesendet."})
+        .then(function(){
+          console.log("faye: Nachricht geschickt!");
+        }, function(error){
+          console.log("faye: There was an error publishing: "+ error.message);
+        });
         res.status(response.statusCode).send(body); //res.json(body);
       });
     });
@@ -269,6 +308,12 @@ app.delete("/equipment/:id", function(req,res){
           request.delete(url, function (error, response, body) {
             if(error) res.status(404);
             getConsoleOut(error,req, response,body);
+            bayeux.getClient().publish("/messages/delete", {text: "Ein Equipment Delete Request wurde gesendet."})
+            .then(function(){
+              console.log("faye: Nachricht geschickt!");
+            }, function(error){
+              console.log("faye: There was an error publishing: "+ error.message);
+            });
             res.status(response.statusCode).send(body); //res.json(body);
           });
         });
@@ -276,15 +321,16 @@ app.delete("/equipment/:id", function(req,res){
 
 
 //Server
-var fayeservice = new faye.NodeAdapter({
+var bayeux = new faye.NodeAdapter({
   mount: "/faye",
   timeout: 45
 });
-fayeservice.attach(server);
+bayeux.attach(server);
+server.listen(8000);
 //Client
-var fayeclient = new faye.Client("http://localhost:"+settings.port+"/faye");
-fayeclient.subscribe("/messages", function(message) {
-  console.log(message.text);
+var fayeclient = new faye.Client("http://localhost:"+8000+"/faye");
+fayeclient.subscribe("/messages/**").withChannel(function(channel, message) {
+  console.log('faye,'+channel+': Nachricht erhalten!');
 });
 
 

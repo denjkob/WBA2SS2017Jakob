@@ -75,6 +75,10 @@ router.put("/:id", bodyParser.json(),function(req,res){
     if(errors) {
       res.status(400).send(JSON.stringify(errors));
     }else{
+    req.body.available=obj.equipment[req.params.id].available;
+    req.body.orderedBy=obj.equipment[req.params.id].orderedBy;
+    req.body.orderedUntil=obj.equipment[req.params.id].orderedUntil;
+    req.body.id=req.params.id;
     obj.equipment.splice(req.params.id,1,req.body); //Anfang, wie viele löschen, einfügen
     var json = JSON.stringify(obj);
 
@@ -102,6 +106,9 @@ router.delete("/:id", function(req,res){
 
     var obj = JSON.parse(data);
     obj.equipment.splice(req.params.id, 1);
+    for(i in obj.equipment){
+      obj.equipment[i].id = i;
+    }
     var json = JSON.stringify(obj);
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
@@ -115,21 +122,27 @@ router.put("/:id/order", function(req, res){
     if (err) throw err;
 
     var obj = JSON.parse(data);
+
+    if(req.query.userid != null && req.query.until != null){
+    if(obj.equipment[req.params.id].available=="true"){
       obj.equipment[req.params.id].orderedBy = req.query.userid;
       obj.equipment[req.params.id].orderedUntil = req.query.until;
-    if(req.query.userid != null && req.query.until != null){
       obj.equipment[req.params.id].available = "false";
+      obj.equipment.splice(req.params.id,1,obj.equipment[req.params.id]); //Anfang, wie viele löschen, einfügen
+      var json = JSON.stringify(obj);
+
+      fs.writeFile(dataFile, json, 'utf8', function(err,data){
+        if(err) throw err;
+      });
+      res.send("PUT "+obj.equipment[req.params.id]);
+    }else{
+      res.status(400).send("Equipment allready ordered!")
+    }
     }else{
       obj.equipment[req.params.id].available = "true";
       console.log("equipment reset or Error 400");
+      res.send("PUT "+obj.equipment[req.params.id]);
     }
-    obj.equipment.splice(req.params.id,1,obj.equipment[req.params.id]); //Anfang, wie viele löschen, einfügen
-    var json = JSON.stringify(obj);
-
-    fs.writeFile(dataFile, json, 'utf8', function(err,data){
-      if(err) throw err;
-    });
-    res.send("PUT "+obj.equipment[req.params.id]);
   });
 });
 

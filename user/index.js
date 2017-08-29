@@ -73,7 +73,8 @@ router.put("/:id", bodyParser.json(),function(req,res){
       res.status(401).send(JSON.stringify(errors));
     }else{
 
-    obj.user.splice(req.params.id,1,req.body); //Anfang, wie viele löschen, einfügen
+    obj.user.splice(req.params.id,1,req.body);//Anfang, wie viele löschen, einfügen
+    req.body.id=req.params.id; 
     var json = JSON.stringify(obj);
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
@@ -101,6 +102,9 @@ router.delete("/:id", function(req,res){
 
     var obj = JSON.parse(data);
     obj.user.splice(req.params.id, 1);
+    for(i in obj.user){
+      obj.user[i].id = i;
+    }
     var json = JSON.stringify(obj);
     fs.writeFile(dataFile, json, 'utf8', function(err,data){
       if(err) throw err;
