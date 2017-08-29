@@ -2,7 +2,7 @@ var faye = require("faye");
 var prompt = require("prompt")
 
 var client = new faye.Client("http://localhost:8000/faye");
-console.log("Faye Client started! Subscribe to a channel please. (/messages)");
+console.log("Faye Client started! Subscribe to a channel please. (/messages/**, /messages/new, messages/orders, messages/delete, messages/changes)");
 prompt.start();
 prompt.get(['channel'], function(err, result) {
   client.subscribe(result.channel, function(message) {
