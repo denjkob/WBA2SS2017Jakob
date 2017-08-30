@@ -197,7 +197,7 @@ app.post("/html/register", bodyParser.urlencoded({
     uri: url,
     method: "POST",
     headers: {
-      "content-type": "application/x-www-form-urlencoded"
+      "content-type": "application/urlencoded"
     },
     data: req.body
   };

@@ -136,12 +136,12 @@ router.put("/:id/order", function(req, res){
       });
       res.send("PUT "+obj.equipment[req.params.id]);
     }else{
-      res.status(400).send("Equipment allready ordered!")
+      res.status(400).send({"message":"Equipment not available!"})
     }
     }else{
       obj.equipment[req.params.id].available = "true";
       console.log("equipment reset or Error 400");
-      res.send("PUT "+obj.equipment[req.params.id]);
+      res.send({"message":"Equipment ordered."});
     }
   });
 });

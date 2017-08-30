@@ -40,6 +40,10 @@ router.use(function(req, res, next) {
   next();
 });
 
+router.get("/", function(req, res, next) {
+    res.status(200).redirect("home");
+});
+
 router.get("/home", function(req, res, next) {
   fs.readFile("./html/index.html", "utf8", function(err, data) {
     if (err) throw err;
@@ -49,6 +53,13 @@ router.get("/home", function(req, res, next) {
 
 router.get("/login", function(req, res, next) {
   fs.readFile("./html/login.html", "utf8", function(err, data) {
+    if (err) throw err;
+    res.status(200).send(data);
+  });
+});
+
+router.get("/lend", function(req, res, next) {
+  fs.readFile("./html/lend.html", "utf8", function(err, data) {
     if (err) throw err;
     res.status(200).send(data);
   });
@@ -73,7 +84,7 @@ router.post("/register", bodyParser.urlencoded({
     fs.readFile("./html/login.html", "utf8", function(err, data) {
       if (err) throw err;
       console.log(body);
-      res.status(200).send(data);
+      res.status(200).send(body);
     });
   });
 });
@@ -84,12 +95,37 @@ router.post("/login", passport.authenticate('local', {
   failureFlash: false
 }));
 
+router.post("/lend", bodyParser.urlencoded({
+  extended: true
+}), function(req, res, next) {
+  console.log(req.body);
+if(req.body.equipmentid != null){
+  if (req.body.userid != null && req.body.until != null) {
+    var url = req.protocol + "://" + req.headers.host + "/equipment/" +req.body.equipmentid+ "/order?userid=" + req.body.userid + "&until=" + req.body.until;
+  } else {
+    var url = req.protocol + "://" + req.headers.host + "/equipment/" +req.body.equipmentid;
+  } }else{
+    res.status(400).redirect("lend");
+  }
+  var options = {
+    uri: url,
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    json: req.body
+  };
 
-passport.serializeUser(function(userid, done) {
+  request(options, function(error, response, body) {
+    res.json(body);
+  });
+});
+
+/*passport.serializeUser(function(userid, done) {
   done(null, userid);
 });
 
 passport.deserializeUser(function(userid, done) {
   done(null, userid);
-});
+});*/
 module.exports = router;
